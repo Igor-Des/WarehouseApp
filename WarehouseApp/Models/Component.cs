@@ -12,6 +12,10 @@ namespace WarehouseApp.Models
         [Display(Name = "Код")]
         public int ComponentId { get; set; }
 
+        [Display(Name = "Название")]
+        [Required(ErrorMessage = "Не указано название")]
+        public string Name { get; set; }
+
         [Display(Name = "Код поставщика")]
         [ForeignKey("Supplier")]
         [Required(ErrorMessage = "Не указан поставщик")]

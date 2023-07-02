@@ -10,12 +10,8 @@ namespace WarehouseApp.Data
 
         }
 
-        public DbSet<Supplier> Supplier { get; set; }
-        public DbSet<TypeComponent> TypeComponent { get; set; }
-        public DbSet<Component> Component { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<TypeComponent> TypeComponents { get; set; }
+        public DbSet<Component> Components { get; set; }
     }
-}
-
-{
-}
 }

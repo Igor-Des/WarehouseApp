@@ -1,13 +1,18 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WarehouseApp.Data;
+using WarehouseApp.Middleware;
 
 namespace WarehouseApp
 {
@@ -24,6 +29,18 @@ namespace WarehouseApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            string connectionDB = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<WarehouseContext>(options => options.UseSqlServer(connectionDB));
+
+            services.AddMemoryCache();
+            services.AddDistributedMemoryCache();
+
+            services.AddResponseCompression(options => options.EnableForHttps = true);
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            
+            services.AddSession();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +62,10 @@ namespace WarehouseApp
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
+
+            app.UseDbInitializer();
 
             app.UseEndpoints(endpoints =>
             {
