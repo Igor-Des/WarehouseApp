@@ -10,9 +10,12 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
 using WarehouseApp.Data;
 using WarehouseApp.Middleware;
+using WarehouseApp.Models;
+using WarehouseApp.Services;
 
 namespace WarehouseApp
 {
@@ -28,6 +31,7 @@ namespace WarehouseApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
             services.AddControllersWithViews();
 
             string connectionDB = Configuration.GetConnectionString("DefaultConnection");
@@ -40,7 +44,9 @@ namespace WarehouseApp
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             
             services.AddSession();
-            services.AddMvc();
+            services.AddScoped<ICached<Supplier>, CachedSupplier>();
+            services.AddScoped<ICached<TypeComponent>, CachedTypeComponent>();
+            services.AddScoped<ICached<Component>, CachedComponent>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,19 +65,17 @@ namespace WarehouseApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseSession();
             app.UseRouting();
 
-            app.UseAuthorization();
-
-            app.UseSession();
-
-            app.UseDbInitializer();
+            //app.UseDbInitializer();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

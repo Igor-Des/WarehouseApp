@@ -23,7 +23,7 @@ namespace WarehouseApp.Services
             {
                 _memoryCache.Set(key, components, new MemoryCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(258)
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(60)
                 });
             }
         }
@@ -36,7 +36,7 @@ namespace WarehouseApp.Services
                 components = _context.Components.ToList();
                 if (components != null)
                 {
-                    _memoryCache.Set(key, components, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(258)));
+                    _memoryCache.Set(key, components, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(60)));
                 }
             }
             return components;
