@@ -1,4 +1,7 @@
-﻿@model IEnumerable<WarehouseApp.Models.Component>
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common
+@using WarehouseApp.ViewModels
+@model X.PagedList.IPagedList<ComponentViewModel>
 
 @{
     ViewData["Title"] = "Товары";
@@ -9,26 +12,56 @@
 <p>
     <a asp-action="Create">Добавить новый товар</a>
 </p>
+
+@using (Html.BeginForm())
+{
+    <div style="display:flex;">
+        <div style="margin-right: 15px;">
+            <p>Введите поставщика: </p>
+            <input type="text" name="searchSupplier" value="@ViewBag.CurrentFilter1?.ToString()" />
+        </div>
+        <div>
+            <p>Введите тип товара:</p>
+            <input type="text" name="searchType" value="@ViewBag.CurrentFilter2?.ToString()" />
+        </div>
+    </div>
+
+
+    <p style="margin-top: 15px;">
+        <input type="submit" value="Отправить" />
+        <a class="alink-reset" asp-action="Index" asp-route-reset="1">
+            Сбросить фильтрацию
+        </a>
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Наименование
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.Price">
+                    Цена
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Amount)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.Amount">
+                    Количество
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.Date">
+                    Дата поступления
+                </a>
+                
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TypeComponent.Name)
+                Тип товара
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Supplier.Name)
+                Поставщик
             </th>
             <th></th>
         </tr>
@@ -49,10 +82,10 @@
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TypeComponent.Name)
+                @Html.DisplayFor(modelItem => item.TypeComponentName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Supplier.Name)
+                @Html.DisplayFor(modelItem => item.SupplierName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ComponentId">Изменить</a> |
@@ -63,3 +96,9 @@
 }
     </tbody>
 </table>
+
+
+Страница @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) из @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter1=ViewBag.CurrentFilter1, currentFilter2=ViewBag.CurrentFilter2 }), new PagedListRenderOptions {
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }})
