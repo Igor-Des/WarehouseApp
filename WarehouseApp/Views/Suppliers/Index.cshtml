@@ -1,4 +1,7 @@
-﻿@model IEnumerable<WarehouseApp.Models.Supplier>
+﻿@using WarehouseApp.Models;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+@model X.PagedList.IPagedList<Supplier>
 
 @{
     ViewData["Title"] = "Поставщики";
@@ -13,7 +16,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Наименование
             </th>
             <th></th>
         </tr>
@@ -33,3 +36,9 @@
 }
     </tbody>
 </table>
+
+Страница @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) из @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions {
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }
+})

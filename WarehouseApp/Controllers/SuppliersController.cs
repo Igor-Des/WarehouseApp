@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using WarehouseApp.Data;
 using WarehouseApp.Models;
+using WarehouseApp.Services;
+using X.PagedList;
 
 namespace WarehouseApp.Controllers
 {
@@ -20,9 +24,12 @@ namespace WarehouseApp.Controllers
         }
 
         // GET: Suppliers
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int? page)
         {
-            return View(await _context.Suppliers.ToListAsync());
+            var suppliers = _context.GetService<ICached<Supplier>>().GetList("Supplier");
+            int pageSize = 10;
+            int pageNumber = page ?? 1;
+            return View(suppliers.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Suppliers/Details/5
@@ -60,6 +67,7 @@ namespace WarehouseApp.Controllers
             {
                 _context.Add(supplier);
                 await _context.SaveChangesAsync();
+                _context.GetService<ICached<Supplier>>().AddList("Supplier");
                 return RedirectToAction(nameof(Index));
             }
             return View(supplier);
@@ -99,6 +107,7 @@ namespace WarehouseApp.Controllers
                 {
                     _context.Update(supplier);
                     await _context.SaveChangesAsync();
+                    _context.GetService<ICached<Supplier>>().AddList("Supplier");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -142,6 +151,7 @@ namespace WarehouseApp.Controllers
             var supplier = await _context.Suppliers.FindAsync(id);
             _context.Suppliers.Remove(supplier);
             await _context.SaveChangesAsync();
+            _context.GetService<ICached<Supplier>>().AddList("Supplier");
             return RedirectToAction(nameof(Index));
         }
 
