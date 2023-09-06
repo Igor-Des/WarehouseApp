@@ -15,84 +15,63 @@
 
 @using (Html.BeginForm())
 {
-    <div style="display:flex;">
+    <div style="display:block;">
         <div style="margin-right: 15px;">
             <p>Введите поставщика: </p>
-            <input type="text" name="searchSupplier" value="@ViewBag.CurrentFilter1?.ToString()" />
+            <input style="width: 30%;" type="text" name="searchSupplier" value="@ViewBag.CurrentFilter1?.ToString()" />
         </div>
         <div>
             <p>Введите тип товара:</p>
-            <input type="text" name="searchType" value="@ViewBag.CurrentFilter2?.ToString()" />
+            <input style="width: 30%;" type="text" name="searchType" value="@ViewBag.CurrentFilter2?.ToString()" />
         </div>
     </div>
 
 
     <p style="margin-top: 15px;">
-        <input type="submit" value="Отправить" />
+        <input style="width: 20%" type="submit" value="Отправить" />
         <a class="alink-reset" asp-action="Index" asp-route-reset="1">
             Сбросить фильтрацию
         </a>
     </p>
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Наименование
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewBag.Price">
-                    Цена
-                </a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewBag.Amount">
-                    Количество
-                </a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewBag.Date">
-                    Дата поступления
-                </a>
-                
-            </th>
-            <th>
-                Тип товара
-            </th>
-            <th>
-                Поставщик
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+<div class="sorted">
+    <span id="sorted-text">Соритровать по:</span>
+    <a class="a-sorted" asp-action="Index" asp-route-sortOrder="@ViewBag.Price">Цена</a>
+    <a class="a-sorted" asp-action="Index" asp-route-sortOrder="@ViewBag.Amount">Количество</a>
+    <a class="a-sorted" asp-action="Index" asp-route-sortOrder="@ViewBag.Date">Дате</a>
+</div>
+<table class="table-comp">
+<tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeComponentName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SupplierName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ComponentId">Изменить</a> |
-                <a asp-action="Details" asp-route-id="@item.ComponentId">Подробнее</a> |
-                <a asp-action="Delete" asp-route-id="@item.ComponentId">Удалить</a>
-            </td>
-        </tr>
+            <tr class="total_amt_tr">
+                <td style="padding: 0 30px 0 0;">
+                    <img src="/img/img-for-comp.png" alt="image comp" width="64px">
+                </td>
+                <td style="padding-top: 25px;" class="td-block">
+                    <span class="text-td">Наименование:</span> @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td class="td-block">
+                    <span class="text-td">Цена:</span> @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td class="td-block">
+                    <span class="text-td">Количество:</span> @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td class="td-block">
+                    <span class="text-td">Дата:</span> @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td class="td-block">
+                    <span class="text-td">Тип:</span> @Html.DisplayFor(modelItem => item.TypeComponentName)
+                </td>
+                <td class="td-block">
+                    <span class="text-td">Поставщик:</span> @Html.DisplayFor(modelItem => item.SupplierName)
+                </td>
+                <td id="td-nav-comp">
+                    <a asp-action="Edit" asp-route-id="@item.ComponentId">Изменить</a>
+                    <a asp-action="Details" asp-route-id="@item.ComponentId">Подробнее</a>
+                    <a asp-action="Delete" asp-route-id="@item.ComponentId">Удалить</a>
+                </td>
+            </tr>
 }
     </tbody>
 </table>

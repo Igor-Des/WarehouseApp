@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using System;
 using WarehouseApp.Data;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WarehouseApp.Middleware
 {
@@ -14,16 +16,14 @@ namespace WarehouseApp.Middleware
         {
             _next = next;
         }
-
-        public Task Invoke(HttpContext context, IServiceProvider serviceProvider, WarehouseContext dbContext)
+        
+        public Task Invoke(HttpContext context)
         {
             if (!(context.Session.Keys.Contains("starting")))
             {
-                DbInitializer.Initialize(dbContext);
+                DbInitializer.Initialize(context.RequestServices.GetRequiredService<WarehouseContext>());
                 context.Session.SetString("starting", "Yes");
             }
-
-            // Call the next delegate/middleware in the pipeline
             return _next.Invoke(context);
         }
     }

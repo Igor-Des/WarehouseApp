@@ -67,7 +67,9 @@ namespace WarehouseApp
             app.UseSession();
             app.UseRouting();
 
-            //app.UseDbInitializer();
+
+            // добавляем компонента miidleware по инициализации базы данных
+            // app.UseDbInitializer();
 
             app.UseEndpoints(endpoints =>
             {

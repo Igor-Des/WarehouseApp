@@ -69,3 +69,85 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+/* Componentsd views */
+.table-comp {
+    font-family: sans-serif;
+    border-collapse: separate;
+    border-spacing: 0em 2em;
+    table-layout: fixed;
+}
+
+.td-block {
+    display: block;
+}
+
+td {
+    font-size: 12px;
+}
+
+.text-td {
+    font-weight: bold;
+    color: #96a3ae;
+}
+
+#td-nav-comp a {
+    display: block;
+    margin: 15px;
+}
+
+.total_amt_tr:after {
+    content: "";
+    display: block;
+    width: 600px;
+    height: 1px;
+    background: #c3c3c3;
+    position: absolute;
+    left: 20%;
+}
+/* SORTED for components index*/
+.sorted {
+    font-family: sans-serif;
+    font-size: 14px;
+    width: 600px;
+}
+
+#sorted-text {
+    color: #96a3ae;
+    margin-right: 20px;
+}
+
+.a-sorted {
+    margin-right: 20px;
+    text-decoration: none;
+    color: black;
+}
+
+.a-sorted:hover {
+    color: rgb(32, 128, 255);
+}
+
+/* FOR INPUT */
+input, select {
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px 4px rgba(0,0,0,0.06);
+}
+
+input[type=submit] {
+        /* remove default behavior */
+        appearance: none;
+        -webkit-appearance: none;
+        /* usual styles */
+        padding: 10px;
+        border: none;
+        background-color: #3F51B5;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 5px;
+        width: 100%;
+}
+
+.btn btn-danger {
+    width: 20%;
+}
